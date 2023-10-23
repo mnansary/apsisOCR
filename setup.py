@@ -16,7 +16,7 @@ classifiers = [
  
 setup(
   name='apsisocr',
-  version='0.0.1',
+  version='0.0.2',
   description='Bangla English Mixed Languge Scene / printed OCR Toolkit',
   long_description=open('README.md',encoding='utf-8').read() + '\n\n' + open('CHANGELOG.txt',encoding='utf-8').read(),
   long_description_content_type='text/markdown',

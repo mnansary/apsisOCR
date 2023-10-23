@@ -57,7 +57,8 @@ It is recommended to use conda environment .
 
 * **clone the repository** : 
 ```bash
-git clone https://github.com/mnansary/apsis-ocr.git
+git clone https://github.com/mnansary/apsisOCR.git
+cd apsisOCR
 ```
 
 
