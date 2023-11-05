@@ -50,7 +50,8 @@ class PaddleDBNet(Detector):
         det_db_score_mode: str = "slow",
         use_dilation: bool = False,
         line_model_url: str = 'https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_det_infer.tar',
-        word_model_url: str = 'https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/Multilingual_PP-OCRv3_det_infer.tar'
+        word_model_url: str = 'https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/Multilingual_PP-OCRv3_det_infer.tar',
+        load_line_model : bool=False
     ) -> None:
         """
         Initialize the PaddleDBNet OCR detector.
@@ -66,6 +67,7 @@ class PaddleDBNet(Detector):
             use_dilation (bool): Whether to use dilation in DB model (default: False).
             line_model_url (str): URL to download the line detection model.
             word_model_url (str): URL to download the word detection model.
+            load_line_model (bool) : Wheather we should load the line model or not
 
         """
         super().__init__()
@@ -82,13 +84,14 @@ class PaddleDBNet(Detector):
         self.use_dilation           =   use_dilation
         # model paths
         base_dir = os.path.expanduser("~/.apsis_ocr/")
-        line_model_path=create_dir(base_dir,"line")
-        word_model_path=create_dir(base_dir,"word")
-        maybe_download(line_model_path,line_model_url)
-        maybe_download(word_model_path,word_model_url)
+
+        if load_line_model:
+            line_model_path=create_dir(base_dir,"line")
+            maybe_download(line_model_path,line_model_url)
+            self.line_model=self.load_model(line_model_path)
         
-        # get models
-        self.line_model=self.load_model(line_model_path)
+        word_model_path=create_dir(base_dir,"word")
+        maybe_download(word_model_path,word_model_url)
         self.word_model=self.load_model(word_model_path)
 
 

@@ -41,7 +41,7 @@ class ApsisOCR(object):
         LOG_INFO("Loaded Bangla Model")
         self.en_rec=SVTRLCNet()
         LOG_INFO("Loaded English Model")
-        self.detector=PaddleDBNet()        
+        self.detector=PaddleDBNet(load_line_model=True)        
         LOG_INFO("Loaded Paddle detector")
         self.lang_cls=DenseNet121BnEnClassifier()
         LOG_INFO("Loaded Language classifier")

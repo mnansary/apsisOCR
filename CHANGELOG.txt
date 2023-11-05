@@ -8,3 +8,7 @@ Change Log
 0.0.2 (24/09/2023)
 -------------------
 - added liscencing
+
+0.0.3 (05/11/2023)
+-------------------
+- added base application without line and word number
