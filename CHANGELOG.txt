@@ -12,3 +12,7 @@ Change Log
 0.0.3 (05/11/2023)
 -------------------
 - added base application without line and word number
+
+0.0.4 (01/05/2024)
+-------------------
+- apsisbnocr
