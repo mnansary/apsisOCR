@@ -136,47 +136,52 @@ class ApsisBNOCR(object):
         crops=self.detector.get_crops(img,word_boxes)
         # line-word sorting
         df=self.process_boxes(word_boxes,line_boxes)
+        if len(df)>0:
+            #--------------------------------bangla------------------------------------
+            sorted_crops=[crops[bid] for bid in df.crop_id.tolist()]
+            bn_text=self.bn_rec.infer(sorted_crops)
+            df["text"]=bn_text
+            df=df.sort_values('line_no')
+            # format
+            for idx in range(len(df)):
+                data={}
+                data["line_no"]=int(df.iloc[idx,0])
+                data["word_no"]=int(df.iloc[idx,1])
+                # array 
+                poly_res=  []
+                poly    =  df.iloc[idx,3]
+                poly    = np.array(poly).reshape(4,2)
+                for pair in poly:
+                    _pair=[float(pair[0]),float(pair[1])]
+                    poly_res.append(_pair)
+                
+                data["poly"]   =poly_res
+                data["text"]   =df.iloc[idx,4]
+                result.append(data)
+            #--------------------------------combine------------------------------------
+            # lines
+            df=pd.DataFrame(result)
+            df=df[["text","line_no","word_no"]]
+            lines=[]
+            _lines=sorted([_line for _line in df.line_no.unique()])
+            for line in _lines:
+                ldf=df.loc[df.line_no==line]
+                ldf.reset_index(drop=True,inplace=True)
+                ldf=ldf.sort_values('word_no')
+                _ltext=''
+                for idx in range(len(ldf)):
+                    text=ldf.iloc[idx,0]
+                    _ltext+=' '+text
+                lines.append(_ltext)
+            text="\n".join(lines)
 
-        #--------------------------------bangla------------------------------------
-        sorted_crops=[crops[bid] for bid in df.crop_id.tolist()]
-        bn_text=self.bn_rec.infer(sorted_crops)
-        df["text"]=bn_text
-        df=df.sort_values('line_no')
-        # format
-        for idx in range(len(df)):
-            data={}
-            data["line_no"]=int(df.iloc[idx,0])
-            data["word_no"]=int(df.iloc[idx,1])
-            # array 
-            poly_res=  []
-            poly    =  df.iloc[idx,3]
-            poly    = np.array(poly).reshape(4,2)
-            for pair in poly:
-                _pair=[float(pair[0]),float(pair[1])]
-                poly_res.append(_pair)
-            
-            data["poly"]   =poly_res
-            data["text"]   =df.iloc[idx,4]
-            result.append(data)
-        #--------------------------------combine------------------------------------
-        # lines
-        df=pd.DataFrame(result)
-        df=df[["text","line_no","word_no"]]
-        lines=[]
-        _lines=sorted([_line for _line in df.line_no.unique()])
-        for line in _lines:
-            ldf=df.loc[df.line_no==line]
-            ldf.reset_index(drop=True,inplace=True)
-            ldf=ldf.sort_values('word_no')
-            _ltext=''
-            for idx in range(len(ldf)):
-                text=ldf.iloc[idx,0]
-                _ltext+=' '+text
-            lines.append(_ltext)
-        text="\n".join(lines)
-
-        # format output
-        output={}
-        output["result"]=result
-        output["text"]=text  
-        return output
+            # format output
+            output={}
+            output["result"]=result
+            output["text"]=text  
+            return output
+        else:
+            output={}
+            output["result"]=None
+            output["text"]="" 
+            return

@@ -16,3 +16,7 @@ Change Log
 0.0.4 (01/05/2024)
 -------------------
 - apsisbnocr
+
+0.0.5 (22/11/2024)
+------------------
+- added Null handling to apsisbnocr
