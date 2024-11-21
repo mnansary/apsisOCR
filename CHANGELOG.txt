@@ -24,3 +24,7 @@ Change Log
 0.0.6 (22/11/2024)
 ------------------
 - added Null handling to apsisbnocr - output typo update
+
+0.0.7 (22/11/2024)
+------------------
+- BNbaseOCR -> location and text only
