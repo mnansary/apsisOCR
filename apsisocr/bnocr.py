@@ -184,4 +184,4 @@ class ApsisBNOCR(object):
             output={}
             output["result"]=None
             output["text"]="" 
-            return
+            return output
